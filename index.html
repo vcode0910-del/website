@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiStore - All in One Digital Solution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; color: white; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .card-hover:hover { transform: translateY(-10px); border-color: #3b82f6; box-shadow: 0 0 25px rgba(59, 130, 246, 0.3); }
+        #entrance-overlay { z-index: 9999; }
+        .category-pill:hover { background: #3b82f6; color: white; }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- WELCOME OVERLAY -->
+    <div id="entrance-overlay" class="fixed inset-0 bg-slate-900 flex flex-col items-center justify-center text-center p-6">
+        <div class="animate__animated animate__zoomIn">
+            <i data-lucide="shopping-cart" class="w-20 h-20 text-blue-500 mx-auto mb-4"></i>
+            <h1 class="text-4xl font-extrabold mb-2">Welcome to <span class="text-blue-500">MultiStore</span></h1>
+            <p class="text-gray-400 mb-8">Solusi Kebutuhan Digital Terlengkap & Otomatis</p>
+            <button onclick="enterSite()" class="bg-blue-600 hover:bg-blue-500 px-10 py-3 rounded-full font-bold transition-all transform hover:scale-110">
+                Masuk Toko
+            </button>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-40 glass px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <i data-lucide="zap" class="text-blue-500 fill-blue-500"></i>
+            <span class="text-xl font-bold tracking-tighter">MULTISTORE</span>
+        </div>
+        <div class="max-w-md w-full mx-4 hidden md:block">
+            <div class="relative">
+                <input type="text" id="searchInput" onkeyup="searchProduct()" placeholder="Cari RDP, VPS, Bot, atau Design..." 
+                       class="w-full bg-slate-800 border border-slate-700 rounded-full px-5 py-2 focus:outline-none focus:border-blue-500">
+                <i data-lucide="search" class="absolute right-4 top-2.5 text-gray-500 w-5"></i>
+            </div>
+        </div>
+        <button onclick="window.location.href='https://wa.me/628123456789'" class="flex items-center gap-2 bg-green-600 px-4 py-2 rounded-lg font-semibold text-sm">
+            <i data-lucide="message-circle" class="w-4"></i> Admin
+        </button>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="py-16 px-6 text-center">
+        <h2 class="text-5xl font-extrabold mb-4 animate__animated animate__fadeInDown">Satu Platform, <span class="text-blue-500">Semua Ada.</span></h2>
+        <div class="flex flex-wrap justify-center gap-3 mt-8">
+            <span class="category-pill border border-slate-700 px-4 py-1 rounded-full text-sm cursor-pointer transition">Hosting</span>
+            <span class="category-pill border border-slate-700 px-4 py-1 rounded-full text-sm cursor-pointer transition">VPS/RDP</span>
+            <span class="category-pill border border-slate-700 px-4 py-1 rounded-full text-sm cursor-pointer transition">Domain</span>
+            <span class="category-pill border border-slate-700 px-4 py-1 rounded-full text-sm cursor-pointer transition">Discord Bot</span>
+            <span class="category-pill border border-slate-700 px-4 py-1 rounded-full text-sm cursor-pointer transition">App Premium</span>
+        </div>
+    </header>
+
+    <!-- PRODUCT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-6 pb-20">
+        <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Produk akan dirender oleh JavaScript -->
+        </div>
+    </main>
+
+    <!-- PAYMENT MODAL -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-3xl overflow-hidden animate__animated animate__fadeInUp">
+            <div class="p-6 border-b border-slate-800 flex justify-between">
+                <h3 class="text-xl font-bold">Checkout</h3>
+                <button onclick="closeModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div id="modalContent" class="p-6">
+                <!-- Isi Modal Otomatis -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING CONTACT -->
+    <a href="https://wa.me/628123456789" class="fixed bottom-6 right-6 bg-green-500 p-4 rounded-full shadow-lg hover:scale-110 transition-all z-40">
+        <i data-lucide="phone-call" class="text-white"></i>
+    </a>
+
+    <script>
+        // Data Produk Lengkap
+        const products = [
+            { id: 1, name: "Cloud Hosting Starter", cat: "Hosting", price: 15000, icon: "server" },
+            { id: 2, name: "RDP Ram 8GB", cat: "RDP", price: 50000, icon: "monitor" },
+            { id: 3, name: "VPS Linux High", cat: "VPS", price: 85000, icon: "cpu" },
+            { id: 4, name: "Domain .COM 1 Year", cat: "Domain", price: 145000, icon: "globe" },
+            { id: 5, name: "Discord Music Bot", cat: "Bot", price: 25000, icon: "message-square" },
+            { id: 6, name: "Netflix Premium 1 Bln", cat: "App", price: 35000, icon: "play" },
+            { id: 7, name: "Canva Pro Masa Aktif", cat: "App", price: 10000, icon: "edit" },
+            { id: 8, name: "Design Poster Event", cat: "Design", price: 50000, icon: "palette" }
+        ];
+
+        function enterSite() {
+            document.getElementById('entrance-overlay').classList.add('animate__animated', 'animate__fadeOut');
+            setTimeout(() => document.getElementById('entrance-overlay').style.display = 'none', 500);
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card glass p-6 rounded-2xl card-hover transition-all duration-300" data-name="${p.name}">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                        <i data-lucide="${p.icon}"></i>
+                    </div>
+                    <span class="text-xs text-blue-400 font-semibold uppercase">${p.cat}</span>
+                    <h4 class="text-lg font-bold mt-1">${p.name}</h4>
+                    <p class="text-2xl font-black mt-3 text-white">Rp ${p.price.toLocaleString()}</p>
+                    <button onclick="openCheckout(${p.id})" class="w-full mt-6 bg-blue-600 py-3 rounded-xl font-bold hover:bg-blue-500 transition-all">Beli Sekarang</button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openCheckout(id) {
+            const product = products.find(p => p.id === id);
+            const modal = document.getElementById('paymentModal');
+            document.getElementById('modalContent').innerHTML = `
+                <div class="text-center mb-6">
+                    <p class="text-gray-400 text-sm">Total Pembayaran</p>
+                    <h2 class="text-3xl font-bold text-blue-400">Rp ${product.price.toLocaleString()}</h2>
+                    <p class="mt-2 text-white font-medium">${product.name}</p>
+                </div>
+                <div class="space-y-3">
+                    <button onclick="processAPI('qris', ${product.price})" class="w-full flex items-center justify-between bg-white/5 p-4 rounded-xl border border-slate-700 hover:border-blue-500">
+                        <span class="font-bold italic text-white text-xl">QRIS <small class="text-xs italic font-normal">(Otomatis)</small></span>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg" class="h-6">
+                    </button>
+                    <p class="text-[10px] text-gray-500 text-center">QRIS Mendukung DANA, OVO, GOPAY, LinkAja & Bank Transfer</p>
+                </div>
+                <div id="qrisDisplay" class="mt-6 flex flex-col items-center hidden">
+                    <p class="mb-2 text-sm">Scan QR di bawah ini:</p>
+                    <div id="qrCodePlaceholder" class="bg-white p-2 rounded-lg">
+                        <!-- QR Code dari API akan muncul disini -->
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ContohQRIS" id="qrisImg">
+                    </div>
+                    <p class="mt-4 animate-pulse text-yellow-500 text-xs font-bold text-center">SISTEM MENUNGGU PEMBAYARAN...</p>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        async function processAPI(method, amount) {
+            document.getElementById('qrisDisplay').classList.remove('hidden');
+            // Logika Frontend memanggil Backend
+            console.log("Meminta QRIS ke Backend untuk jumlah:", amount);
+            
+            /* 
+               DI SINI ADALAH TEMPAT MEMANGGIL BACKEND ANDA 
+               Contoh:
+               const response = await fetch('/api/pay', { method: 'POST', body: JSON.stringify({amount}) });
+               const data = await response.json();
+               document.getElementById('qrisImg').src = data.qr_url;
+            */
+        }
+
+        function closeModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+        }
+
+        function searchProduct() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.style.display = card.dataset.name.toLowerCase().includes(query) ? "block" : "none";
+            });
+        }
+
+        window.onload = renderProducts;
+    </script>
+</body>
+</html>
