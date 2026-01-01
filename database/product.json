@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Cloud Hosting Starter",
+    "logo": "server",
+    "benefits": ["1 Website", "10GB SSD", "Unlimited BW", "Free SSL"],
+    "price": 15000,
+    "stock": 10
+  },
+  {
+    "id": 2,
+    "name": "VPS NVMe Pro",
+    "logo": "cpu",
+    "benefits": ["4 vCPU", "8GB RAM", "100GB NVMe", "Dedicated IP"],
+    "price": 125000,
+    "stock": 5
+  },
+  {
+    "id": 3,
+    "name": "RDP Windows 10",
+    "logo": "monitor",
+    "benefits": ["Anti Lag", "Full Administrator", "Region Indo", "24/7 Aktif"],
+    "price": 55000,
+    "stock": 0
+  }
+]
